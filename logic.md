@@ -16,6 +16,4 @@ currentDistanceReading --> ifDistanceLessThanThreshold
 ifDistanceLessThanThreshold --> |True| activatePiezo
 activatePiezo --> thresholdset
 ifDistanceLessThanThreshold ---> |False| thresholdset
-
-terminalEnd --> terminalStart
 ```

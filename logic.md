@@ -13,5 +13,5 @@ terminalStart --> thresholdSet
 thresholdSet --> setPiezoPin
 setPiezoPin --> currentDistanceReading
 currentDistanceReading --> ifDistanceLessThanThreshold
-ifDistanceLessThanThreshold --> seactivatePiezo
+ifDistanceLessThanThreshold --> activatePiezo
 ```

@@ -15,6 +15,7 @@ setPiezoPin --> currentDistanceReading
 currentDistanceReading --> ifDistanceLessThanThreshold
 ifDistanceLessThanThreshold --> |True| activatePiezo
 activatePiezo --> terminalEnd
+ifDistanceLessThanThreshold --> |false| terminalStart
 
 terminalEnd --> terminalStart
 ```

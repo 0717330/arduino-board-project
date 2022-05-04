@@ -10,4 +10,7 @@ activatePiezo(write HIGH to piezoPin)
 ifDistanceLessThanThreshold{distanceRead < distanceThreshold>}
 
 terminalStart --> thresholdSet
+thresholdSet --> setPiezoPin
+setPiezoPin --> currentDistanceReading
+currentDistanceReading --> ifDistanceLessThanThreshold
 ```

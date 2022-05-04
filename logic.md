@@ -14,4 +14,5 @@ thresholdSet --> setPiezoPin
 setPiezoPin --> currentDistanceReading
 currentDistanceReading --> ifDistanceLessThanThreshold
 ifDistanceLessThanThreshold --> activatePiezo
+activatePiezo --> terminalEnd
 ```

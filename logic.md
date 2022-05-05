@@ -21,3 +21,17 @@ activatePiezo --> ButtonLogic
 ButtonLogic --> |true| thresholdSet
 ButtonLogic --> |False| terminalEnd
 ```
+
+```mermaid
+flowchart TD
+terminalStart([Start])
+terminalEnd([End])
+
+ButtonUp{Forward}
+ButtonLeft{Left}
+ButtonRight{Right}
+ButtonDown{Reverse}
+ButtonMiddle{on/off}
+
+
+```

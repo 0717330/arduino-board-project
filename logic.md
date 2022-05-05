@@ -8,12 +8,17 @@ setPiezoPin(piezoPin = 22)
 currentDistanceReading(distanceRead = response from Sonar)
 activatePiezo(write HIGH to piezoPin)
 ifDistanceLessThanThreshold{distanceRead < distanceThreshold>}
+ButtonLogic{Is button on?}
 
 terminalStart --> thresholdSet
 thresholdSet --> setPiezoPin
 setPiezoPin --> currentDistanceReading
 currentDistanceReading --> ifDistanceLessThanThreshold
 ifDistanceLessThanThreshold --> |True| activatePiezo
-activatePiezo --> thresholdSet
+activatePiezo --> ButtonLogic
+ButtonLogic --> |true| thresholdSet
+
+thresholdSet
 ifDistanceLessThanThreshold ---> |False| thresholdSet
+
 ```

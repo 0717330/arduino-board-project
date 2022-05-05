@@ -14,6 +14,6 @@ thresholdSet --> setPiezoPin
 setPiezoPin --> currentDistanceReading
 currentDistanceReading --> ifDistanceLessThanThreshold
 ifDistanceLessThanThreshold --> |True| activatePiezo
-activatePiezo --> thresholdset
-ifDistanceLessThanThreshold ---> |False| thresholdset
+activatePiezo --> thresholdSet
+ifDistanceLessThanThreshold ---> |False| thresholdSet
 ```

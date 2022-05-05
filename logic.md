@@ -19,5 +19,5 @@ ifDistanceLessThanThreshold ---> |False| thresholdSet
 ifDistanceLessThanThreshold --> |True| activatePiezo
 activatePiezo --> ButtonLogic
 ButtonLogic --> |true| thresholdSet
-
+ButtonLogic --> |False| terminalEnd
 ```

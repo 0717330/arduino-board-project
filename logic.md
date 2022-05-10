@@ -27,11 +27,21 @@ flowchart TD
 terminalStart([Start])
 terminalEnd([End])
 
+Remote{Remote}
 ButtonUp{Forward}
 ButtonLeft{Left}
 ButtonRight{Right}
 ButtonDown{Reverse}
 ButtonMiddle{on/off}
 
+Sonar{SonarSensor}
+Line{LineSensor}
+Potentionmeter{potentionmeter}
+LED{LED}
+Buzzer{buzzer}
+DCmotor{DCmotor}
+ServoMotor{ServoMotor}
 
+Remote --> ButtonMiddle
+ButtonMiddle --> terminalStart
 ```

@@ -15,7 +15,7 @@ thresholdSet --> setPiezoPin
 setPiezoPin --> currentDistanceReading
 currentDistanceReading --> ifDistanceLessThanThreshold
 
-ifDistanceLessThanThreshold ---> |False| thresholdSet
+ifDistanceLessThanThreshold --> |False| thresholdSet
 ifDistanceLessThanThreshold --> |True| activatePiezo
 activatePiezo --> ButtonLogic
 ButtonLogic --> |true| thresholdSet
@@ -36,12 +36,37 @@ ButtonMiddle{on/off}
 
 Sonar{SonarSensor}
 Line{LineSensor}
-Potentionmeter{potentionmeter}
+Potentionmeter1{potentionmeter}
+Potentionmeter2{potentionmeter}
 LED{LED}
 Buzzer{buzzer}
-DCmotor{DCmotor}
+DCmotor1{DCmotor}
+DCmotor2{DCmotor}
 ServoMotor{ServoMotor}
 
 Remote --> ButtonMiddle
-ButtonMiddle --> terminalStart
+ButtonMiddle --> |true|terminalStart
+ButtonMiddle --> |false|Remote
+
+terminalStart --> ButtonUp
+ButtonUp --> |false| terminalStart
+ButtonUp --> |true| DCmotor1
+
+terminalStart --> ButtonDown
+ButtonDown --> Potentionmeter1
+ButtonDown --> |false| terminalStart
+Potentionmeter1 --> |true| DCmotor
+Potentionmeter1 --> |false| DCmotor
+
+terminalStart --> ButtonRight
+ButtonRight --> |false| terminalStart
+ButtonRight --> |true| ServoMotor
+
+terminalStart --> ButtonLeft
+ButtonLeft --> |false| terminalStart
+ButtonLeft --> |true| ServoMotor
+
+terminalStart --> Sonar 
+Sonar --> |true| Buzzer
+Sonar --> |false| terminalStart
 ```

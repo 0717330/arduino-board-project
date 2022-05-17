@@ -35,45 +35,40 @@ ButtonMiddle --> |on| terminalEnd
 ```
 
 ```mermaid
+flowchart TD
+terminalStart([Start])
+terminalEnd([End])
 
-Sonar{SonarSensor}
-Line{LineSensor}
-Potentionmeter1{is potentionmeter in use?}
-Potentionmeter2{is potentionmeter in use?}
-LED{LED}
-Buzzer{buzzer}
-DCmotor1{DCmotor}
-DCmotor2{DCmotor}
+TurnSequenceOn(Turn alarm sequence on)
+TurnAlarmOff(turn alarm off)
+ReadValueOfSonar(Read value of sonar)
+Sonar{Does sonar read entity?}
+Buzzer(set buzzer to active)
+LED(LED light)
 
-Remote --> ButtonMiddle
-ButtonMiddle --> |true|terminalStart
-ButtonMiddle --> |false|Remote
+terminalStart --> ReadValueOfSonar
+ReadValueOfSonar--> Sonar
+Sonar --> |true| TurnSequenceOn
+TurnSequenceOn --> Buzzer
+Buzzer --> LED
+Sonar --> |false| TurnAlarmOff
+TurnAlarmOff --> terminalEnd
+LED --> terminalEnd
 ```
 
 ```mermaid
-terminalStart --> ButtonUp
-ButtonUp --> |false| terminalStart
-ButtonUp --> |true| DCmotor1
+flowchart TD
+terminalStart([Start])
+terminalEnd([End])
 
-terminalStart --> ButtonDown
-ButtonDown --> |true| Potentionmeter1
-ButtonDown --> |false| terminalStart
-Potentionmeter1 --> |true| DCmotor2
-Potentionmeter1 --> |false| DCmotor2
-DCmotor2 --> DCreverse
-DCreverse --> ButtonDown2{Is Reverse still held down}
-ButtonDown2{Is Reverse still held down} --> |true| DCmotor2
-ButtonDown2{Is Reverse still held down} --> |false| terminalStart
+Line{LineSensor}
+Servo(servo)
 
-terminalStart --> ButtonRight
-ButtonRight --> |false| terminalStart
-ButtonRight --> |true| ServoMotor
+```
 
-terminalStart --> ButtonLeft
-ButtonLeft --> |false| terminalStart
-ButtonLeft --> |true| ServoMotor
-
-terminalStart --> Sonar 
-Sonar --> |true| Buzzer
-Sonar --> |false| terminalStart
+```mermaid
+flowchart TD
+terminalStart([Start])
+terminalEnd([End])
+Potentionmeter
 ```

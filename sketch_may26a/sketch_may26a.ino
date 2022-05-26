@@ -61,6 +61,27 @@ Serial.begin(9600);           // Open serial communications and wait for port to
   Serial.println("initialization done.");
 logEvent("System Initialisation...");
 
+// Traffic Lights - LED Outputs
+pinMode(ledRed, OUTPUT);
+pinMode(ledYellow, OUTPUT);
+pinMode(ledGreen, OUTPUT);
+
+// DC Motor & Motor Module - L298N
+motor.setSpeed(70);
+
+// Servo
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+
+//Potentiometer
+pinMode(pot, INPUT);
+
+// Piezo Buzzer
+pinMode(piezoPin,OUTPUT);
+
+// Sonar - HC-SR04
+pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
+pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
+
 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +89,8 @@ logEvent("System Initialisation...");
 void loop() {
   // put your main code here, to run repeatedly:
 
-
-
+// Line Sensor
+pinMode(lineSensorPin, OUTPUT);
 
 }
 

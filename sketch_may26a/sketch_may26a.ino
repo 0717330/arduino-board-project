@@ -1,9 +1,16 @@
 
+// SD Card Module
+#include <SPI.h>
+#include <SD.h>
 
+// Real Time Clock (RTC)
+#include "RTClib.h"
+RTC_Millis rtc;     // Software Real Time Clock (RTC)
+DateTime rightNow;  // used to store the current time.
 // Infrared Module
 #include "Adafruit_NECremote.h"
 
-#define IRpin         8
+#define IRpin         4
 Adafruit_NECremote remote(IRpin);
 
 // Traffic Lights - LED Outputs
@@ -15,8 +22,8 @@ Adafruit_NECremote remote(IRpin);
 #include <L298N.h>
 
 // Pin definition
-const unsigned int IN1 = 7;
-const unsigned int IN2 = 8;
+const unsigned int IN1 = 5;
+const unsigned int IN2 = 6;
 const unsigned int EN = 9;
 
 // Create one motor instance
@@ -33,33 +40,34 @@ Servo myservo;
 #define piezoPin 8
 
 // Sonar - HC-SR04
-#define echoPin 6 // attach pin D2 Arduino to pin Echo of HC-SR04
+#define echoPin 2 // attach pin D2 Arduino to pin Echo of HC-SR04
 #define trigPin A4 //attach pin D3 Arduino to pin Trig of HC-SR04
 
 // Line Sensor
 #define lineSensorPin 3
 
+int lastcode = -1;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
   // put your setup code here, to run once:
 
-
+pinMode(lineSensorPin, OUTPUT);
 Serial.begin(9600);           // Open serial communications and wait for port to open:
   while (!Serial) {
     delay(1);                   // wait for serial port to connect. Needed for native USB port only
   }
 
-// SD Card initialisation
-  Serial.print("Initializing SD card...");
-  if (!SD.begin(10)) {
-    Serial.println("initialization failed!");
-    while (1);
-  }
-// Real Time Clock (RTC)
-  rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
-  Serial.println("initialization done.");
-logEvent("System Initialisation...");
+//// SD Card initialisation
+//  Serial.print("Initializing SD card...");
+//  if (!SD.begin(10)) {
+//    Serial.println("initialization failed!");
+//    while (1);
+//  }
+//// Real Time Clock (RTC)
+//  rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
+//  Serial.println("initialization done.");
+//logEvent("System Initialisation...");
 
 // Traffic Lights - LED Outputs
 pinMode(ledRed, OUTPUT);
@@ -90,7 +98,26 @@ void loop() {
   // put your main code here, to run repeatedly:
 
 // Line Sensor
-pinMode(lineSensorPin, OUTPUT);
+
+// You can set the listen() time out to 'n' seconds
+  int c = remote.listen(5);  // seconds to wait before timing out!
+  // Or you can wait 'forever' for a valid code
+  //int c = remote.listen();  // Without a #, it means wait forever
+
+  if (c >= 0) {
+    Serial.print("Received code #"); 
+    Serial.println(c, DEC);
+    lastcode = c;
+  } else if (c == -3) {
+    Serial.print("Repeat (");
+    Serial.print(lastcode);
+    Serial.println(")");
+  } else if (c == -2) {
+    Serial.println("Data error");
+  } else {
+    Serial.println("Timed out waiting!");
+  }
+
 
 }
 

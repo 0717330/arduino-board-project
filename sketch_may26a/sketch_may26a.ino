@@ -170,17 +170,15 @@ int readDistance() {
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
   // Displays the distance on the Serial Monito
 
-  if (distance < 50) {
-    return true;
-    digitalWrite(ledGreen, HIGH);
+  if (distance < 10) {
+    digitalWrite(ledRed, HIGH);
   } else {
-    return false;
-    digitalWrite(ledGreen, LOW);
+    digitalWrite(ledRed, LOW);
   }
 }
 
 
-void remoteDecode() {
+bool remoteDecode() {
   int c = remote.listen(1);  // seconds to wait before timing out!
   // Or you can wait 'forever' for a valid code
   //int c = remote.listen();  // Without a #, it means wait forever
@@ -191,10 +189,16 @@ void remoteDecode() {
       // Top keys
       case 70:
         motor.forward();
+        digitalWrite(ledRed, LOW);
         Serial.println("FORWARD");
         break;
       case 21:
         motor.backward();
+        digitalWrite(ledRed, HIGH);
+
+
+
+        
         Serial.println("DOWN");
         break;
       case 68:
@@ -211,6 +215,7 @@ void remoteDecode() {
         break;
       case 64:
         motor.stop();
+        digitalWrite(ledRed, LOW);
         Serial.println("STOP");
         break;
 
@@ -244,21 +249,6 @@ void PotentiometerValue() {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void logEvent(String dataToLog) {
   /*

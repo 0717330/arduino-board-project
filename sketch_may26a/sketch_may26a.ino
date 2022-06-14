@@ -1,4 +1,7 @@
 
+//defining pins and devices
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // SD Card Module
 #include <SPI.h>
 #include <SD.h>
@@ -51,6 +54,8 @@ Servo myservo;
 
 
 
+
+
 // Piezo Buzzer
 #define piezoPin 8
 
@@ -64,7 +69,7 @@ int distance; // variable for the distance measurement
 
 
 // Line Sensor
-#define lineSensorPin 3
+#define linePin A5
 
 int lastcode = -1;
 
@@ -74,7 +79,20 @@ int lastcode = -1;
 void setup() {
   // put your setup code here, to run once:
 
-  pinMode(lineSensorPin, OUTPUT);
+
+  // Traffic Lights - LED Outputs
+  pinMode(ledRed, OUTPUT);
+  pinMode(ledYellow, OUTPUT);
+  pinMode(ledGreen, OUTPUT);
+
+
+  digitalWrite(ledRed, LOW);
+  digitalWrite(ledGreen, LOW);
+  digitalWrite(ledYellow, LOW);
+
+
+
+  pinMode(linePin, INPUT);
   Serial.begin(9600);           // Open serial communications and wait for port to open:
   while (!Serial) {
     delay(1);                   // wait for serial port to connect. Needed for native USB port only
@@ -82,23 +100,16 @@ void setup() {
 
 
 
-  //// SD Card initialisation
-  //  Serial.print("Initializing SD card...");
-  //  if (!SD.begin(10)) {
-  //    Serial.println("initialization failed!");
-  //    while (1);
-  //  }
-  //// Real Time Clock (RTC)
-  //  rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
-  //  Serial.println("initialization done.");
-  //logEvent("System Initialisation...");
-
-
-
-  // Traffic Lights - LED Outputs
-  pinMode(ledRed, OUTPUT);
-  pinMode(ledYellow, OUTPUT);
-  pinMode(ledGreen, OUTPUT);
+  // SD Card initialisation
+  Serial.print("Initializing SD card...");
+  if (!SD.begin(10)) {
+    Serial.println("initialization failed!");
+    while (1);
+  }
+  // Real Time Clock (RTC)
+  rtc.begin(DateTime(F(__DATE__), F(__TIME__)));
+  Serial.println("initialization done.");
+  logEvent("System Initialisation...");
 
 
 
@@ -134,29 +145,16 @@ void setup() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop() {
   // put your main code here, to run repeatedly:
-
-  Serial.println(readDistance());
-
-
-
-  // myservo.write(0);
-  //  delay(1500);
-  //  myservo.write(90);
-  //  delay(1500);
-  //  myservo.write(180);
-  //  delay(1500);
-
-
-
   readDistance();
   remoteDecode();
   SonarSequence();
-  LineSensorSequence();
+  readlineSensor();
+
   PotentiometerValue();
   motorDC();
   delay(100);
 }
-int readDistance() {
+void readDistance() {
   // Clears the trigPin condition
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -172,8 +170,10 @@ int readDistance() {
 
   if (distance < 10) {
     digitalWrite(ledRed, HIGH);
+    tone(piezoPin, 655);
   } else {
     digitalWrite(ledRed, LOW);
+    noTone(piezoPin);
   }
 }
 
@@ -195,10 +195,6 @@ bool remoteDecode() {
       case 21:
         motor.backward();
         digitalWrite(ledRed, HIGH);
-
-
-
-        
         Serial.println("DOWN");
         break;
       case 68:
@@ -218,37 +214,26 @@ bool remoteDecode() {
         digitalWrite(ledRed, LOW);
         Serial.println("STOP");
         break;
-
     }
   }
 }
-
-
-
-void motorDC() {
-  //  motor.forward();
-  //  delay(1000);
-  //  motor.stop();
-  //  delay(1000);
-  //  motor.backward();
-  //  delay(1000);
+void readlineSensor() {
+  int lineReadout = analogRead(linePin);
+  Serial.println(lineReadout);
+  if (lineReadout >= 100) {
+    Serial.println("Line");
+    digitalWrite(ledRed, HIGH);
+    tone(piezoPin, 655);
+    myservo.write(125);
+    delay(500);
+    myservo.write(90);
+  } else {
+    Serial.println("No  Line");
+    digitalWrite(ledRed, LOW);
+    noTone(piezoPin);
+  }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void SonarSequence() {
-
-
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void LineSensorSequence() {
-
-
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-void PotentiometerValue() {
-
-
-}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void logEvent(String dataToLog) {
   /*
